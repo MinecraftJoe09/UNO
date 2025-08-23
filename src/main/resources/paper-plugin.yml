@@ -1,0 +1,4 @@
+name: UNO
+version: '1.0-SNAPSHOT'
+main: me.minecraftjoe09.uno.Plugin
+api-version: '1.21'
