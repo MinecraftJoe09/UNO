@@ -462,6 +462,10 @@ public class Game {
         return this.players;
     }
 
+    public @NotNull RuleSet getRules() {
+        return this.rules;
+    }
+
     public void broadcast(@NotNull Component component) {
         this.players.getRealPlayers().forEach(p -> p.getPlayer().sendMessage(component));
     }
