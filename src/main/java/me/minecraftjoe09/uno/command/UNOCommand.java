@@ -197,6 +197,33 @@ public class UNOCommand implements LifecycleEventHandler<@NotNull ReloadableRegi
                                 })
                         )
                 )
+                .then(literal("list")
+                        .requires(cmd -> cmd.getSender() instanceof Player player && Game.ofOwner(player) != null)
+                        .executes(cmd -> {
+                            Player player = (Player) cmd.getSource().getSender();
+                            Game game = Game.ofOwner(player);
+                            if (game == null) {
+                                player.sendMessage(ERR_NO_OWNER);
+                                return 0;
+                            }
+                            PlayerList list = game.getPlayers();
+                            int players = list.getRealPlayers().size();
+                            int bots = list.size() - players;
+                            TextComponent.Builder builder = Component.text();
+                            builder.append(
+                                    Component.text("There are currently %d players (+%d bots) in this game:".formatted(players, bots))
+                            );
+                            for (UNOPlayer unoPlayer : list) {
+                                builder.appendNewline();
+                                builder.appendSpace();
+                                builder.append(
+                                        Component.text(unoPlayer.getName())
+                                );
+                            }
+                            player.sendMessage(builder.build());
+                            return players + bots;
+                        })
+                )
                 .then(literal("rule")
                         .requires(cmd -> cmd.getSender() instanceof Player player && Game.ofOwner(player) != null)
                         .then(buildEnumListRuleNode(
